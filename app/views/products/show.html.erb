@@ -1,34 +1,31 @@
 <% content_for :title, @product.name %>
-
-<nav class="breadcrumb">
-  <%= link_to "Home", root_path %>
-  <span>/</span>
-  <span><%= @product.name %></span>
-</nav>
+<% content_for :container_class, "container--wide" %>
 
 <div class="product-show">
-  <div class="product-show__gallery">
-    <% if @product.images.attached? %>
-      <%= image_tag @product.images.first, class: "product-show__image" %>
+  <%= link_to "← Back to Gallery", products_path, class: "product-show__back" %>
 
-      <% if @product.images.count > 1 %>
-        <div class="product-show__thumbnails">
-          <% @product.images.each do |image| %>
-            <%= image_tag image, class: "product-show__thumbnail" %>
-          <% end %>
-        </div>
+  <div class="product-show__layout">
+    <div class="product-show__gallery">
+      <% if @product.images.attached? %>
+        <%= image_tag @product.images.first, class: "product-show__image" %>
+
+        <% if @product.images.count > 1 %>
+          <div class="product-show__thumbnails">
+            <% @product.images.each do |image| %>
+              <%= image_tag image, class: "product-show__thumbnail" %>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="product-show__image product-show__image--placeholder"></div>
       <% end %>
-    <% else %>
-      <div class="product-show__image product-show__image--placeholder"></div>
-    <% end %>
-  </div>
+    </div>
 
-  <div class="product-show__details">
-    <h1><%= @product.name %></h1>
-    <p class="product-show__price"><%= number_to_currency(@product.price_cents / 100.0) %></p>
+    <div class="product-show__details">
+      <h1><%= @product.name %></h1>
+      <p class="product-show__price"><%= number_to_currency(@product.price_cents / 100.0) %></p>
 
-    <%= button_to "Add to Cart", cart_items_path(product_id: @product.id), method: :post, class: "button product-show__add-to-cart" %>
-
-    <%= link_to "Back to products", products_path, class: "product-show__back" %>
+      <%= button_to "Add to Cart", cart_items_path(product_id: @product.id), method: :post, class: "button product-show__add-to-cart" %>
+    </div>
   </div>
 </div>
