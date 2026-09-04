@@ -1,0 +1,20 @@
+<% content_for :title, "My Account" %>
+
+<div class="account-layout">
+  <%= render "accounts/nav" %>
+
+  <div class="account-layout__content">
+    <h1>Hi, <%= @user.first_name %></h1>
+
+    <div class="account-card">
+      <p><strong>Name:</strong> <%= @user.first_name %> <%= @user.last_name %></p>
+      <p><strong>Email:</strong> <%= @user.email %></p>
+
+      <%= link_to "Edit Account", edit_account_path, class: "button" %>
+
+      <%= button_to "Delete Account", account_path, method: :delete,
+            form: { data: { turbo_confirm: "Are you sure? This can't be undone." } },
+            class: "link-button" %>
+    </div>
+  </div>
+</div>

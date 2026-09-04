@@ -1,0 +1,15 @@
+<% content_for :title, "Admin - User" %>
+
+<h1>User</h1>
+
+<p><strong>Email:</strong> <%= @user.email %></p>
+<p><strong>Name:</strong> <%= @user.first_name %> <%= @user.last_name %></p>
+<p><strong>Admin:</strong> <%= @user.admin? ? "Yes" : "No" %></p>
+<p><strong>Joined:</strong> <%= @user.created_at.strftime("%b %-d, %Y") %></p>
+
+<% unless @user == current_user %>
+  <%= button_to "Delete User", admin_user_path(@user), method: :delete,
+        form: { data: { turbo_confirm: "Delete this user? This can't be undone." } } %>
+<% end %>
+
+<%= link_to "Back to users", admin_users_path %>

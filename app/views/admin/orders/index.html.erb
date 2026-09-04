@@ -1,0 +1,26 @@
+<% content_for :title, "Admin - Orders" %>
+
+<h1>Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Total</th>
+      <th>Placed</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.email %></td>
+        <td><%= order.status.titleize %></td>
+        <td><%= number_to_currency(order.total_cents / 100.0) %></td>
+        <td><%= order.created_at.strftime("%b %-d, %Y") %></td>
+        <td><%= link_to "View", admin_order_path(order) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

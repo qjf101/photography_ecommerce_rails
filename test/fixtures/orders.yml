@@ -1,0 +1,50 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: orders
+#
+#  id                         :integer          not null, primary key
+#  confirmation_token         :string
+#  email                      :string           not null
+#  shipping_address_line1     :string
+#  shipping_address_line2     :string
+#  shipping_city              :string
+#  shipping_country           :string
+#  shipping_name              :string
+#  shipping_postal_code       :string
+#  shipping_state             :string
+#  status                     :string           default("pending"), not null
+#  total_cents                :integer          default(0), not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  cart_id                    :integer
+#  stripe_checkout_session_id :string
+#  stripe_payment_intent_id   :string
+#  user_id                    :integer
+#
+# Indexes
+#
+#  index_orders_on_cart_id                     (cart_id)
+#  index_orders_on_confirmation_token          (confirmation_token) UNIQUE
+#  index_orders_on_stripe_checkout_session_id  (stripe_checkout_session_id) UNIQUE
+#  index_orders_on_user_id                     (user_id)
+#
+# Foreign Keys
+#
+#  cart_id  (cart_id => carts.id) ON DELETE => nullify
+#  user_id  (user_id => users.id) ON DELETE => nullify
+#
+one:
+  user: one
+  email: test@test.com
+  status: pending
+  total_cents: 5999
+  stripe_checkout_session_id: cs_test_fixture_one
+
+two:
+  user: two
+  email: test_2@test.com
+  status: paid
+  total_cents: 19999
+  stripe_checkout_session_id: cs_test_fixture_two

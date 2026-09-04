@@ -1,0 +1,64 @@
+<% content_for :title, "Order Confirmation" %>
+
+<h1>Thank you for your order!</h1>
+
+<div class="order-status-banner">
+  <span class="status-badge status-badge--<%= @order.status %>"><%= @order.status.titleize %></span>
+  <span class="order-status-banner__number">Order #<%= @order.confirmation_token %></span>
+</div>
+
+<div class="cart-layout">
+  <div class="cart-items">
+    <% @order.line_items.each do |line_item| %>
+      <div class="cart-item-card">
+        <% if line_item.product.images.attached? %>
+          <%= image_tag line_item.product.images.first, class: "cart-item-card__image" %>
+        <% else %>
+          <div class="cart-item-card__image cart-item-card__image--placeholder"></div>
+        <% end %>
+
+        <div class="cart-item-card__details">
+          <div class="cart-item-card__header">
+            <h3><%= line_item.product.name %></h3>
+          </div>
+          <p class="cart-item-card__price">
+            <%= number_to_currency(line_item.unit_price_cents / 100.0) %> &times; <%= line_item.quantity %>
+          </p>
+        </div>
+
+        <p class="cart-item-card__total"><%= number_to_currency((line_item.quantity * line_item.unit_price_cents) / 100.0) %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="order-summary">
+    <h2>Order Summary</h2>
+
+    <div class="order-summary__row">
+      <span>Email</span>
+      <span><%= @order.email %></span>
+    </div>
+
+    <div class="order-summary__row order-summary__row--total">
+      <span>Total</span>
+      <span><%= number_to_currency(@order.total_cents / 100.0) %></span>
+    </div>
+
+    <% if @order.shipping_name.present? %>
+      <h3>Shipping to</h3>
+      <p class="order-summary__shipping">
+        <%= @order.shipping_name %><br>
+        <%= @order.shipping_address_line1 %><br>
+        <% if @order.shipping_address_line2.present? %>
+          <%= @order.shipping_address_line2 %><br>
+        <% end %>
+        <%= @order.shipping_city %>, <%= @order.shipping_state %> <%= @order.shipping_postal_code %><br>
+        <%= @order.shipping_country %>
+      </p>
+    <% end %>
+
+    <% if @order.paid? || @order.completed? %>
+      <%= button_to "Request Refund", request_refund_order_path(@order), method: :patch, class: "button order-summary__checkout" %>
+    <% end %>
+  </div>
+</div>

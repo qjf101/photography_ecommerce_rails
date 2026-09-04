@@ -1,0 +1,6 @@
+<nav class="account-nav">
+  <%= link_to "My Account", account_path,
+        class: ["account-nav__link", ("account-nav__link--active" if current_page?(account_path))] %>
+  <%= link_to "Orders", account_orders_path,
+        class: ["account-nav__link", ("account-nav__link--active" if current_page?(account_orders_path))] %>
+</nav>

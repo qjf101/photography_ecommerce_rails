@@ -1,0 +1,72 @@
+<% content_for :title, "Cart" %>
+
+<% if @cart && @cart.cart_items&.any? %>
+  <h1>Cart (<%= @cart.cart_items.sum(:quantity) %>)</h1>
+
+  <div class="cart-layout">
+    <div class="cart-items">
+      <% @cart.cart_items.each do |cart_item| %>
+        <div class="cart-item-card">
+          <% if cart_item.product.images.attached? %>
+            <%= image_tag cart_item.product.images.first, class: "cart-item-card__image" %>
+          <% else %>
+            <div class="cart-item-card__image cart-item-card__image--placeholder"></div>
+          <% end %>
+
+          <div class="cart-item-card__details">
+            <div class="cart-item-card__header">
+              <h3><%= cart_item.product.name %></h3>
+              <%= button_to "Remove", cart_item_path(cart_item), method: :delete, class: "link-button cart-item-card__remove" %>
+            </div>
+
+            <p class="cart-item-card__price"><%= number_to_currency(cart_item.product.price_cents / 100.0) %> each</p>
+
+            <div class="quantity-stepper">
+              <%= button_to "−", cart_item_path(cart_item, quantity_change: "decrement"), method: :patch, class: "quantity-stepper__button" %>
+              <span class="quantity-stepper__value"><%= cart_item.quantity %></span>
+              <%= button_to "+", cart_item_path(cart_item, quantity_change: "increment"), method: :patch, class: "quantity-stepper__button" %>
+            </div>
+          </div>
+
+          <p class="cart-item-card__total"><%= number_to_currency((cart_item.quantity * cart_item.product.price_cents) / 100.0) %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+
+      <div class="order-summary__row">
+        <span>Subtotal</span>
+        <span><%= number_to_currency(@cart.total_cents / 100.0) %></span>
+      </div>
+      <div class="order-summary__row">
+        <span>Shipping</span>
+        <span>Calculated at checkout</span>
+      </div>
+
+      <div class="order-summary__row order-summary__row--total">
+        <span>Total</span>
+        <span><%= number_to_currency(@cart.total_cents / 100.0) %></span>
+      </div>
+
+      <%= form_with url: order_checkout_path, method: :post, data: { turbo: false } do |form| %>
+        <% unless current_user %>
+          <div>
+            <%= form.label :email, style: "display: block" %>
+            <%= form.email_field :email %>
+          </div>
+        <% end %>
+
+        <%= form.submit "Checkout", class: "button order-summary__checkout" %>
+      <% end %>
+
+      <%= link_to "Continue Shopping", products_path, class: "order-summary__continue" %>
+    </div>
+  </div>
+<% else %>
+  <div class="empty-cart">
+    <p>Your cart is empty.</p>
+    <%= link_to "Continue Shopping", products_path, class: "button" %>
+  </div>
+<% end %>

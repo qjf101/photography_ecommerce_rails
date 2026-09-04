@@ -1,0 +1,9 @@
+<h1>Order Lookup</h1>
+
+<%= form_with url: order_lookup_path, method: :post do |form| %>
+    <%= form.label :email, style: "display: block" %>
+    <%= form.email_field :email %>
+    <%= form.label :confirmation_token, "Order Number", style: "display: block" %>
+    <%= form.text_field :confirmation_token %>
+    <%= form.submit "Find" %>
+<% end %>

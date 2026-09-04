@@ -1,0 +1,50 @@
+# Primary database (development, test, and production) runs on Postgres,
+# connected to via the environment (see .env for development/test; for
+# production these must be real shell-exported vars at `bin/kamal deploy`
+# time - see README). Test uses its own database (DB_NAME + "_test") on the
+# same server, so running tests never touches your development data.
+postgres: &postgres
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV.fetch("DB_HOST") %>
+  username: <%= ENV.fetch("DB_USER") %>
+  password: <%= ENV.fetch("DB_PASSWORD") %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+# SQLite. Used for the solid_queue/solid_cache/solid_cable databases in
+# production.
+sqlite: &sqlite
+  adapter: sqlite3
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *postgres
+  database: <%= ENV.fetch("DB_NAME") %>
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *postgres
+  database: <%= ENV.fetch("DB_NAME") %>_test
+
+# The cache/queue/cable databases stay on SQLite, stored in the storage/
+# directory, which by default is mounted as a persistent Docker volume in
+# config/deploy.yml.
+production:
+  primary:
+    <<: *postgres
+    database: <%= ENV.fetch("DB_NAME") %>
+  cache:
+    <<: *sqlite
+    database: storage/production_cache.sqlite3
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *sqlite
+    database: storage/production_queue.sqlite3
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *sqlite
+    database: storage/production_cable.sqlite3
+    migrations_paths: db/cable_migrate

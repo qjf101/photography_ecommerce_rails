@@ -1,0 +1,40 @@
+<% content_for :title, "Admin - Order" %>
+
+<h1>Order</h1>
+
+<p>Email: <%= @order.email %></p>
+<p>Status: <%= @order.status.titleize %></p>
+<p>Total: <%= number_to_currency(@order.total_cents / 100.0) %></p>
+
+<h2>Items</h2>
+<% @order.line_items.each do |line_item| %>
+  <p>
+    <%= line_item.product.name %> &times; <%= line_item.quantity %>
+    &mdash; <%= number_to_currency((line_item.quantity * line_item.unit_price_cents) / 100.0) %>
+  </p>
+<% end %>
+
+<% if @order.shipping_name.present? %>
+  <h2>Shipping to</h2>
+  <p>
+    <%= @order.shipping_name %><br>
+    <%= @order.shipping_address_line1 %><br>
+    <% if @order.shipping_address_line2.present? %>
+      <%= @order.shipping_address_line2 %><br>
+    <% end %>
+    <%= @order.shipping_city %>, <%= @order.shipping_state %> <%= @order.shipping_postal_code %><br>
+    <%= @order.shipping_country %>
+  </p>
+<% end %>
+
+<div>
+  <% if @order.paid? || @order.refund_pending? %>
+    <%= button_to "Mark Completed", complete_admin_order_path(@order), method: :patch %>
+  <% end %>
+
+  <% if @order.paid? || @order.completed? || @order.refund_pending? %>
+    <%= button_to "Process Refund", refund_admin_order_path(@order), method: :patch %>
+  <% end %>
+</div>
+
+<%= link_to "Back to orders", admin_orders_path %>

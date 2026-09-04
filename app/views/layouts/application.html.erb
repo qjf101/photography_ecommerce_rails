@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Photography Ecommerce Rails" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Photography Ecommerce Rails">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="site-header__bar">
+        <%= link_to "Photography Shop", root_path, class: "site-header__logo" %>
+
+        <nav class="site-header__nav">
+          <%= link_to "Track Order", order_lookup_path %>
+
+          <% if current_user&.admin? %>
+            <%= link_to "Manage Products", admin_products_path %>
+            <%= link_to "Manage Orders", admin_orders_path %>
+            <%= link_to "Manage Users", admin_users_path %>
+          <% end %>
+
+          <% if current_user %>
+            <%= link_to "My Account", account_path %>
+            <%= button_to "Logout", logout_path, method: :delete, class: "link-button" %>
+          <% else %>
+            <%= link_to "Login", login_path %>
+            <%= link_to "Sign Up", sign_up_path %>
+          <% end %>
+
+          <%= link_to cart_path, class: "site-header__cart" do %>
+            Cart
+            <% if current_cart&.cart_items&.any? %>
+              <span class="badge"><%= current_cart.cart_items.sum(:quantity) %></span>
+            <% end %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

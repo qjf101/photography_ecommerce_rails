@@ -1,0 +1,20 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: products
+#
+#  id          :integer          not null, primary key
+#  active      :boolean          default(TRUE), not null
+#  name        :string
+#  price_cents :integer          default(0), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+one:
+  name: Pic1
+  price_cents: 999
+
+two:
+  name: Pic2
+  price_cents: 999

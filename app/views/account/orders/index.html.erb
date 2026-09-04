@@ -1,0 +1,37 @@
+<% content_for :title, "My Orders" %>
+
+<div class="account-layout">
+  <%= render "accounts/nav" %>
+
+  <div class="account-layout__content">
+    <h1>My Orders</h1>
+
+    <% if @orders.any? %>
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr>
+              <td>#<%= order.confirmation_token %></td>
+              <td><%= order.created_at.strftime("%b %-d, %Y") %></td>
+              <td><%= order.status.titleize %></td>
+              <td><%= number_to_currency(order.total_cents / 100.0) %></td>
+              <td><%= link_to "View", order_path(order) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>You haven't placed any orders yet.</p>
+      <%= link_to "Start Shopping", products_path, class: "button" %>
+    <% end %>
+  </div>
+</div>

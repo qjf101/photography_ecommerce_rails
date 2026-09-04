@@ -1,0 +1,22 @@
+Thank you for your order!
+
+Order confirmation: <%= @order.confirmation_token %>
+
+<% @order.line_items.each do |line_item| -%>
+<%= line_item.product.name %> x <%= line_item.quantity %> — <%= number_to_currency((line_item.quantity * line_item.unit_price_cents) / 100.0) %>
+<% end -%>
+
+Total: <%= number_to_currency(@order.total_cents / 100.0) %>
+
+<% if @order.shipping_name.present? -%>
+Shipping to:
+<%= @order.shipping_name %>
+<%= @order.shipping_address_line1 %>
+<% if @order.shipping_address_line2.present? -%>
+<%= @order.shipping_address_line2 %>
+<% end -%>
+<%= @order.shipping_city %>, <%= @order.shipping_state %> <%= @order.shipping_postal_code %>
+<%= @order.shipping_country %>
+
+<% end -%>
+You can check your order status anytime at <%= order_url(@order) %>.

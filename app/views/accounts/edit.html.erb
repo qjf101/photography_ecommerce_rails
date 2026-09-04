@@ -1,0 +1,13 @@
+<% content_for :title, "Edit Account" %>
+
+<div class="account-layout">
+  <%= render "accounts/nav" %>
+
+  <div class="account-layout__content">
+    <h1>Edit Account</h1>
+
+    <%= render "form", user: @user %>
+
+    <%= link_to "Back to my account", account_path %>
+  </div>
+</div>

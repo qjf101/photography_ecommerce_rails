@@ -1,0 +1,30 @@
+<% content_for :title, "Admin - Users" %>
+
+<h1>Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Admin</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.first_name %> <%= user.last_name %></td>
+        <td><%= user.admin? ? "Yes" : "No" %></td>
+        <td><%= link_to "View", admin_user_path(user) %></td>
+        <td>
+          <% unless user == current_user %>
+            <%= button_to "Delete", admin_user_path(user), method: :delete,
+                  form: { data: { turbo_confirm: "Delete this user?" } } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

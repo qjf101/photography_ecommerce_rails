@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: users
+#
+#  id                 :integer          not null, primary key
+#  admin              :boolean          default(FALSE), not null
+#  email              :string           not null
+#  first_name         :string           not null
+#  last_name          :string           not null
+#  password_digest    :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  stripe_customer_id :string
+#
+# Indexes
+#
+#  index_users_on_email  (email) UNIQUE
+#
+one:
+  email: test@test.com
+  first_name: John
+  last_name: Smith
+  admin: false
+  password_digest: <%= BCrypt::Password.create("password1") %>
+  stripe_customer_id: asfw3r3
+
+two:
+  email: test_2@test.com
+  first_name: Jane
+  last_name: Doe
+  admin: false
+  password_digest: <%= BCrypt::Password.create("password2") %>
+  stripe_customer_id: eg45yr5h54r
+
+admin:
+  email: admin@test.com
+  first_name: Ada
+  last_name: Admin
+  admin: true
+  password_digest: <%= BCrypt::Password.create("adminpass1") %>
+  stripe_customer_id:
