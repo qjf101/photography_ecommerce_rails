@@ -7,7 +7,7 @@ class OrderLookupsController < ApplicationController
 
   def create
     order = Order.find_by(confirmation_token: params[:confirmation_token], email: params[:email])
-    
+
     if order
       session[:authorized_order_tokens] ||= []
       session[:authorized_order_tokens] << order.confirmation_token

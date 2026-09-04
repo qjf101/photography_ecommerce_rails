@@ -1,29 +1,29 @@
 Rails.application.routes.draw do
-  resources :users, only: [:new, :create]
-  resource :account, only: [:show, :edit, :update, :destroy] do
-    resources :orders, only: [:index], module: :account
+  resources :users, only: [ :new, :create ]
+  resource :account, only: [ :show, :edit, :update, :destroy ] do
+    resources :orders, only: [ :index ], module: :account
   end
-  resources :products, only: [:index, :show]
+  resources :products, only: [ :index, :show ]
 
   namespace :admin do
-    resources :products, except: [:show]
-    resources :orders, only: [:index, :show] do
+    resources :products, except: [ :show ]
+    resources :orders, only: [ :index, :show ] do
       member do
         patch :complete
         patch :refund
       end
     end
-    resources :users, only: [:index, :show, :destroy]
+    resources :users, only: [ :index, :show, :destroy ]
   end
 
-  resource :cart, only: [:show]
-  resources :cart_items, only: [:create, :update, :destroy]
-  
+  resource :cart, only: [ :show ]
+  resources :cart_items, only: [ :create, :update, :destroy ]
+
   post "order_checkout", to: "order_checkouts#create", as: :order_checkout
 
   post "stripe/webhooks", to: "stripe_webhooks#create"
 
-  resources :orders, only: [:show] do
+  resources :orders, only: [ :show ] do
     member do
       patch :request_refund
     end

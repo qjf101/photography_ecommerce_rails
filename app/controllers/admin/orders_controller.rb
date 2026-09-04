@@ -1,6 +1,6 @@
 module Admin
   class OrdersController < Admin::BaseController
-    before_action :set_order, only: [:show, :complete, :refund]
+    before_action :set_order, only: [ :show, :complete, :refund ]
 
     def index
       @orders = Order.where.not(stripe_checkout_session_id: nil).where.not(status: "pending").order(created_at: :desc)

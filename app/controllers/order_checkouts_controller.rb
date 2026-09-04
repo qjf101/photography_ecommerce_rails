@@ -22,7 +22,7 @@ class OrderCheckoutsController < ApplicationController
       checkout_session = Stripe::Checkout::Session.create(
         mode: "payment",
         customer_email: @order.email,
-        shipping_address_collection: { allowed_countries: ["US"] },
+        shipping_address_collection: { allowed_countries: [ "US" ] },
         shipping_options: [
           {
             shipping_rate_data: {

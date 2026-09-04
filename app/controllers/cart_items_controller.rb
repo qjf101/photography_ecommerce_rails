@@ -7,14 +7,14 @@ class CartItemsController < ApplicationController
     else
         cart_item.increment!(:quantity)
     end
-    
+
     redirect_to cart_path
   end
 
   def update
     cart_item = current_cart.cart_items.find(params[:id])
 
-    if params[:quantity_change] == 'decrement'
+    if params[:quantity_change] == "decrement"
         if cart_item.quantity <= 1
             cart_item.destroy!
         else
