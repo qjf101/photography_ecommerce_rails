@@ -2,6 +2,11 @@
 # Runs ON THE PROD SERVER (invoked over SSH by .github/workflows/ci.yml's deploy job
 set -euo pipefail
 
+# Non-interactive SSH sessions (like appleboy/ssh-action's) don't source
+# ~/.bashrc, so rbenv's shims never make it onto PATH otherwise - bundle/ruby
+# would be "command not found" even though they work fine in a normal login.
+export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
+
 APP_DIR=/var/www/photography_ecommerce_rails
 ENV_FILE="$APP_DIR/.env.production"
 SERVICE=photography_ecommerce_rails-puma
