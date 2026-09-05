@@ -108,6 +108,20 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ scan_ruby, scan_js, lint, test ]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    concurrency: production_deploy
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: /var/www/photography_ecommerce_rails/bin/deploy
+
   # Disabled: no system tests exist yet (test/system is empty), and running
   # this job would require adding a headless Chrome/chromedriver install step
   # for no benefit in the meantime. Re-enable once real system tests are added.
