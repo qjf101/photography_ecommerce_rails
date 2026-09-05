@@ -1,6 +1,6 @@
 module Admin
   class UsersController < Admin::BaseController
-    before_action :set_user, only: [:show, :destroy]
+    before_action :set_user, only: [ :show, :destroy ]
 
     def index
       @users = User.order(:email)

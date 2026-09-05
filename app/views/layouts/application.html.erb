@@ -25,7 +25,7 @@
 
   <body>
     <header class="site-header">
-      <div class="site-header__bar">
+      <div class="site-header__bar <%= content_for(:container_class) %>">
         <%= link_to "Photography Shop", root_path, class: "site-header__logo" %>
 
         <nav class="site-header__nav">
@@ -55,7 +55,7 @@
       </div>
     </header>
 
-    <main class="container">
+    <main class="container <%= content_for(:container_class) %>">
       <%= render "shared/flash" %>
       <%= yield %>
     </main>

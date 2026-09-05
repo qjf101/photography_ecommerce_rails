@@ -1,10 +1,9 @@
-<%= link_to product, id: dom_id(product), class: "product-card" do %>
+<%= link_to product, id: dom_id(product), class: "product-card", data: { masonry_target: "item" } do %>
   <% if product.images.attached? %>
-    <%= image_tag product.images.first, class: "product-card__image" %>
+    <%= image_tag product.images.first, class: "product-card__image", alt: product.name %>
   <% else %>
     <div class="product-card__image product-card__image--placeholder"></div>
   <% end %>
 
-  <div class="product-card__name"><%= product.name %></div>
-  <div class="product-card__price"><%= number_to_currency(product.price_cents / 100.0) %></div>
+  <span class="visually-hidden"><%= product.name %> — <%= number_to_currency(product.price_cents / 100.0) %></span>
 <% end %>

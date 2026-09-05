@@ -1,8 +1,9 @@
 <% content_for :title, "Products" %>
+<% content_for :container_class, "container--wide" %>
 
-<h1>Products</h1>
+<h1>Gallery</h1>
 
-<div id="products">
+<div id="products" data-controller="masonry">
   <% if @products.any? %>
     <% @products.each do |product| %>
       <%= render product %>

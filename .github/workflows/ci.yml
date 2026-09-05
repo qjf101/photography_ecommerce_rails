@@ -68,7 +68,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # services:
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: photography_ecommerce_rails
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: photography_ecommerce_rails_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     #  redis:
     #    image: valkey/valkey:8
     #    ports:
@@ -89,42 +98,66 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          DB_HOST: localhost
+          DB_USER: photography_ecommerce_rails
+          DB_PASSWORD: postgres
+          DB_NAME: photography_ecommerce_rails
+          STRIPE_SECRET_KEY: sk_test_dummy
+          STRIPE_WEBHOOK_SECRET: whsec_dummy
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
-  system-test:
-    runs-on: ubuntu-latest
-
-    # services:
-    #  redis:
-    #    image: valkey/valkey:8
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
-
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Run System Tests
-        env:
-          RAILS_ENV: test
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test:system
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+  # Disabled: no system tests exist yet (test/system is empty), and running
+  # this job would require adding a headless Chrome/chromedriver install step
+  # for no benefit in the meantime. Re-enable once real system tests are added.
+  # system-test:
+  #   runs-on: ubuntu-latest
+  #
+  #   services:
+  #     postgres:
+  #       image: postgres:16
+  #       env:
+  #         POSTGRES_USER: photography_ecommerce_rails
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_DB: photography_ecommerce_rails_test
+  #       ports:
+  #         - 5432:5432
+  #       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+  #   #  redis:
+  #   #    image: valkey/valkey:8
+  #   #    ports:
+  #   #      - 6379:6379
+  #   #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+  #   steps:
+  #     - name: Install packages
+  #       run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
+  #
+  #     - name: Checkout code
+  #       uses: actions/checkout@v6
+  #
+  #     - name: Set up Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         bundler-cache: true
+  #
+  #     - name: Run System Tests
+  #       env:
+  #         RAILS_ENV: test
+  #         DB_HOST: localhost
+  #         DB_USER: photography_ecommerce_rails
+  #         DB_PASSWORD: postgres
+  #         DB_NAME: photography_ecommerce_rails
+  #         STRIPE_SECRET_KEY: sk_test_dummy
+  #         STRIPE_WEBHOOK_SECRET: whsec_dummy
+  #         # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  #         # REDIS_URL: redis://localhost:6379/0
+  #       run: bin/rails db:test:prepare test:system
+  #
+  #     - name: Keep screenshots from failed system tests
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: screenshots
+  #         path: ${{ github.workspace }}/tmp/screenshots
+  #         if-no-files-found: ignore

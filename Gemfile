@@ -68,6 +68,6 @@ end
 
 gem "stripe", "~> 19.5"
 
-gem "dotenv-rails", "~> 3.2", :groups => [:development, :test]
+gem "dotenv-rails", "~> 3.2", groups: [ :development, :test ]
 
 gem "pg", "~> 1.6"
