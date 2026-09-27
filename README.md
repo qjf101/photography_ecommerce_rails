@@ -10,7 +10,7 @@ admin portal.
 - Postgres (via the `pg` gem) for the primary database in every environment; SQLite for the
   `solid_queue`/`solid_cache`/`solid_cable` databases in production
 - Stripe (Checkout Sessions + webhooks) for payments
-- Active Storage (local disk in development) for product images
+- Active Storage (S3 in prod / local disk in dev) for product images
 - Action Mailer for order confirmation emails
 - `bcrypt` (`has_secure_password`) for authentication
 - Minitest for the test suite
@@ -100,13 +100,11 @@ bin/rails test
 
 ## Deployment
 
-Deploys via [Kamal](https://kamal-deploy.org) (`bin/kamal deploy`). The
-production primary database is Postgres, connected to via `DB_HOST`, `DB_NAME`,
-`DB_USER`, and `DB_PASSWORD` — these must be set as real environment variables
-in the shell you run `bin/kamal deploy` from (Kamal reads them at deploy time
-to inject into the container and to populate `.kamal/secrets`); having them in
-your local `.env` is not enough, since `.env` is only loaded by the app itself
-in development/test, not read by Kamal.
+Runs on an Ubuntu VPS as a traditional (non-Docker) deploy: Puma behind
+nginx, managed by systemd, with Postgres for the primary database and
+SQLite for `solid_queue`/`solid_cache`/`solid_cable`. Merges to `main` that
+pass CI auto-deploy via GitHub Actions, which SSHes in and runs `bin/deploy`
+(pulls, bundles, migrates, precompiles assets, restarts Puma).
 
 ## Notable design decisions
 
