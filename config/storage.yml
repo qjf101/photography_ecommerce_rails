@@ -10,10 +10,10 @@ local:
 # variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, S3_BUCKET).
 amazon:
   service: S3
-  access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY_ID") %>
-  secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY") %>
-  region: <%= ENV.fetch("AWS_REGION") %>
-  bucket: <%= ENV.fetch("S3_BUCKET") %>
+  access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY_ID", nil) %>
+  secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY", nil) %>
+  region: <%= ENV.fetch("AWS_REGION", nil) %>
+  bucket: <%= ENV.fetch("S3_BUCKET", nil) %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
