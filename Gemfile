@@ -66,7 +66,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "stripe", "~> 19.5"
+gem "stripe", "~> 20.0"
 
 gem "dotenv-rails", "~> 3.2", groups: [ :development, :test ]
 
