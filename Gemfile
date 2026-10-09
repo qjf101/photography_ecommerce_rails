@@ -72,4 +72,4 @@ gem "dotenv-rails", "~> 3.2", groups: [ :development, :test ]
 
 gem "pg", "~> 1.6"
 
-gem "aws-sdk-s3", "~> 1.232", require: false
+gem "aws-sdk-s3", "~> 1.233", require: false
